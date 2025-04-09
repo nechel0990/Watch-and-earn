@@ -70,30 +70,44 @@
     const rewardEl = document.getElementById("reward");
 
     let isCooldown = false;
+    let timerStarted = false;
+    let startTime = null;
 
     startBtn.addEventListener("click", () => {
-      if (isCooldown) return;
-      let timeLeft = 15;
-      startBtn.disabled = true;
-      timerEl.textContent = `Time left: ${timeLeft}s`;
-      rewardEl.textContent = "";
+      if (isCooldown || timerStarted) return;
 
-      const countdown = setInterval(() => {
-        timeLeft--;
-        timerEl.textContent = `Time left: ${timeLeft}s`;
-        if (timeLeft <= 0) {
-          clearInterval(countdown);
+      // Open Popunder in new tab (simulate user action)
+      window.open("https://profitableratecpm.com", "_blank");
+
+      timerStarted = true;
+      startTime = new Date().getTime();
+      timerEl.textContent = "Please return after 15 seconds...";
+      rewardEl.textContent = "";
+    });
+
+    document.addEventListener("visibilitychange", () => {
+      if (!timerStarted || document.visibilityState === "visible") {
+        const returnTime = new Date().getTime();
+        const elapsed = (returnTime - startTime) / 1000;
+
+        if (elapsed >= 15) {
           timerEl.textContent = "Done!";
           rewardEl.textContent = "You earned 10 coins!";
+          startBtn.disabled = true;
           isCooldown = true;
+          timerStarted = false;
           setTimeout(() => {
             isCooldown = false;
             startBtn.disabled = false;
             timerEl.textContent = "Click to start";
             rewardEl.textContent = "";
           }, 60000); // 1 minute cooldown
+        } else {
+          timerEl.textContent = `You returned too early (${Math.floor(elapsed)}s). Wait full 15s!`;
+          rewardEl.textContent = "";
+          timerStarted = false;
         }
-      }, 1000);
+      }
     });
   </script></body>
 </html>
