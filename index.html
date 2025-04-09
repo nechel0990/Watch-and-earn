@@ -56,6 +56,11 @@
       color: #444;
       margin-top: 15px;
     }
+    #adTrigger {
+      width: 0;
+      height: 0;
+      overflow: hidden;
+    }
   </style>
 </head>
 <body>
@@ -64,10 +69,13 @@
     <div class="timer" id="timer">Click to start</div>
     <button id="startBtn">Start Watching</button>
     <div class="reward" id="reward"></div>
-  </div>  <!-- Adsterra Popunder Ad Code -->  <script type='text/javascript' src='//pl26335218.profitableratecpm.com/69/7b/77/697b775c8b494c1164f465d4d2d6bff8.js'></script>  <!-- Adsterra Social Bar Ad Code -->  <script type='text/javascript' src='//pl26335245.profitableratecpm.com/49/95/5f/49955f1fac99a4dcff9f73d70f3c9c01.js'></script>  <script>
+  </div>  <!-- Hidden ad trigger zone -->  <div id="adTrigger">
+    <script type='text/javascript' src='//pl26335218.profitableratecpm.com/69/7b/77/697b775c8b494c1164f465d4d2d6bff8.js'></script>
+  </div>  <!-- Adsterra Social Bar Ad Code -->  <script type='text/javascript' src='//pl26335245.profitableratecpm.com/49/95/5f/49955f1fac99a4dcff9f73d70f3c9c01.js'></script>  <script>
     const startBtn = document.getElementById("startBtn");
     const timerEl = document.getElementById("timer");
     const rewardEl = document.getElementById("reward");
+    const adTrigger = document.getElementById("adTrigger");
 
     let isCooldown = false;
     let timerStarted = false;
@@ -76,8 +84,8 @@
     startBtn.addEventListener("click", () => {
       if (isCooldown || timerStarted) return;
 
-      // Open Popunder in new tab (simulate user action)
-      window.open("https://profitableratecpm.com", "_blank");
+      // Trigger popunder by simulating a click in the adTrigger zone
+      adTrigger.click();
 
       timerStarted = true;
       startTime = new Date().getTime();
