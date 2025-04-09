@@ -3,10 +3,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Watch & Earn</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #f4f4f4;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to right, #1f4037, #99f2c8);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -16,10 +17,17 @@
     }
     .container {
       background: white;
-      padding: 30px;
-      border-radius: 15px;
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      padding: 40px 30px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
       text-align: center;
+      max-width: 400px;
+      width: 90%;
+    }
+    h1 {
+      color: #28a745;
+      margin-bottom: 20px;
+      font-size: 28px;
     }
     button {
       padding: 15px 30px;
@@ -29,18 +37,24 @@
       background-color: #28a745;
       color: white;
       cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background-color: #218838;
     }
     button:disabled {
       background-color: #ccc;
+      cursor: not-allowed;
     }
     .timer {
       font-size: 24px;
       margin: 20px 0;
+      color: #333;
     }
     .reward {
       font-size: 20px;
-      color: #333;
-      margin-top: 10px;
+      color: #444;
+      margin-top: 15px;
     }
   </style>
 </head>
@@ -50,7 +64,7 @@
     <div class="timer" id="timer">Click to start</div>
     <button id="startBtn">Start Watching</button>
     <div class="reward" id="reward"></div>
-  </div>  <!-- Placeholder for Adsterra code -->  <!-- Example: Social Bar Script -->  <!-- Replace with your Adsterra code -->  <!-- <script type="text/javascript" src="https://example.adsterra.com/..."></script> -->  <script>
+  </div>  <!-- Adsterra Popunder Ad Code -->  <script type='text/javascript' src='//pl26335218.profitableratecpm.com/69/7b/77/697b775c8b494c1164f465d4d2d6bff8.js'></script>  <!-- Adsterra Social Bar Ad Code -->  <script type='text/javascript' src='//pl26335245.profitableratecpm.com/49/95/5f/49955f1fac99a4dcff9f73d70f3c9c01.js'></script>  <script>
     const startBtn = document.getElementById("startBtn");
     const timerEl = document.getElementById("timer");
     const rewardEl = document.getElementById("reward");
@@ -63,9 +77,6 @@
       startBtn.disabled = true;
       timerEl.textContent = `Time left: ${timeLeft}s`;
       rewardEl.textContent = "";
-
-      // Optionally trigger a popunder here (Adsterra Popunder code)
-      // Example: window.open("https://example.com", "_blank");
 
       const countdown = setInterval(() => {
         timeLeft--;
