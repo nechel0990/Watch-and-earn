@@ -1,0 +1,88 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Watch & Earn</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+    button {
+      padding: 15px 30px;
+      font-size: 18px;
+      border: none;
+      border-radius: 10px;
+      background-color: #28a745;
+      color: white;
+      cursor: pointer;
+    }
+    button:disabled {
+      background-color: #ccc;
+    }
+    .timer {
+      font-size: 24px;
+      margin: 20px 0;
+    }
+    .reward {
+      font-size: 20px;
+      color: #333;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Watch & Earn</h1>
+    <div class="timer" id="timer">Click to start</div>
+    <button id="startBtn">Start Watching</button>
+    <div class="reward" id="reward"></div>
+  </div>  <!-- Placeholder for Adsterra code -->  <!-- Example: Social Bar Script -->  <!-- Replace with your Adsterra code -->  <!-- <script type="text/javascript" src="https://example.adsterra.com/..."></script> -->  <script>
+    const startBtn = document.getElementById("startBtn");
+    const timerEl = document.getElementById("timer");
+    const rewardEl = document.getElementById("reward");
+
+    let isCooldown = false;
+
+    startBtn.addEventListener("click", () => {
+      if (isCooldown) return;
+      let timeLeft = 15;
+      startBtn.disabled = true;
+      timerEl.textContent = `Time left: ${timeLeft}s`;
+      rewardEl.textContent = "";
+
+      // Optionally trigger a popunder here (Adsterra Popunder code)
+      // Example: window.open("https://example.com", "_blank");
+
+      const countdown = setInterval(() => {
+        timeLeft--;
+        timerEl.textContent = `Time left: ${timeLeft}s`;
+        if (timeLeft <= 0) {
+          clearInterval(countdown);
+          timerEl.textContent = "Done!";
+          rewardEl.textContent = "You earned 10 coins!";
+          isCooldown = true;
+          setTimeout(() => {
+            isCooldown = false;
+            startBtn.disabled = false;
+            timerEl.textContent = "Click to start";
+            rewardEl.textContent = "";
+          }, 60000); // 1 minute cooldown
+        }
+      }, 1000);
+    });
+  </script></body>
+</html>
