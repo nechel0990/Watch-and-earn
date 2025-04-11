@@ -3,119 +3,93 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Watch & Earn</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(to right, #1f4037, #99f2c8);
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to bottom right, #0f2027, #203a43, #2c5364);
+      color: white;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       height: 100vh;
-      margin: 0;
+      text-align: center;
     }
     .container {
-      background: white;
-      padding: 40px 30px;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 30px;
       border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-      text-align: center;
-      max-width: 400px;
-      width: 90%;
-    }
-    h1 {
-      color: #28a745;
-      margin-bottom: 20px;
-      font-size: 28px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
     }
     button {
       padding: 15px 30px;
+      margin: 10px;
       font-size: 18px;
       border: none;
       border-radius: 10px;
+      cursor: pointer;
+    }
+    #startBtn {
       background-color: #28a745;
       color: white;
-      cursor: pointer;
-      transition: background 0.3s ease;
     }
-    button:hover {
-      background-color: #218838;
+    #stopBtn {
+      background-color: #dc3545;
+      color: white;
     }
-    button:disabled {
-      background-color: #ccc;
-      cursor: not-allowed;
-    }
-    .timer {
-      font-size: 24px;
-      margin: 20px 0;
-      color: #333;
-    }
-    .reward {
-      font-size: 20px;
-      color: #444;
-      margin-top: 15px;
-    }
-    #adTrigger {
-      width: 0;
-      height: 0;
-      overflow: hidden;
+    .coin-display {
+      font-size: 30px;
+      margin-top: 20px;
     }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>Watch & Earn</h1>
-    <div class="timer" id="timer">Click to start</div>
+    <p>Click Start to begin earning while watching ads.</p>
     <button id="startBtn">Start Watching</button>
-    <div class="reward" id="reward"></div>
-  </div>  <!-- Hidden ad trigger zone -->  <div id="adTrigger">
-    <script type='text/javascript' src='//pl26335218.profitableratecpm.com/69/7b/77/697b775c8b494c1164f465d4d2d6bff8.js'></script>
-  </div>  <!-- Adsterra Social Bar Ad Code -->  <script type='text/javascript' src='//pl26335245.profitableratecpm.com/49/95/5f/49955f1fac99a4dcff9f73d70f3c9c01.js'></script>  <script>
+    <button id="stopBtn" disabled>Stop Watching</button>
+    <div class="coin-display">Coins: <span id="coinCount">0</span></div>
+  </div>  <!-- Adsterra Ads -->  <script type='text/javascript' src='//pl26335218.profitableratecpm.com/69/7b/77/697b775c8b494c1164f465d4d2d6bff8.js'></script>  <script type='text/javascript' src='//pl26335245.profitableratecpm.com/49/95/5f/49955f1fac99a4dcff9f73d70f3c9c01.js'></script>  <script>
+    let coinCount = localStorage.getItem("coins") ? parseInt(localStorage.getItem("coins")) : 0;
+    let intervalId;
+    let adIntervalId;
+
+    const coinDisplay = document.getElementById("coinCount");
     const startBtn = document.getElementById("startBtn");
-    const timerEl = document.getElementById("timer");
-    const rewardEl = document.getElementById("reward");
-    const adTrigger = document.getElementById("adTrigger");
+    const stopBtn = document.getElementById("stopBtn");
 
-    let isCooldown = false;
-    let timerStarted = false;
-    let startTime = null;
+    function updateCoinDisplay() {
+      coinDisplay.textContent = coinCount;
+    }
 
-    startBtn.addEventListener("click", () => {
-      if (isCooldown || timerStarted) return;
+    function openAd() {
+      window.open("https://google.com", "_blank"); // Triggers popunder script
+    }
 
-      // Trigger popunder by simulating a click in the adTrigger zone
-      adTrigger.click();
+    startBtn.onclick = () => {
+      startBtn.disabled = true;
+      stopBtn.disabled = false;
 
-      timerStarted = true;
-      startTime = new Date().getTime();
-      timerEl.textContent = "Please return after 15 seconds...";
-      rewardEl.textContent = "";
-    });
+      intervalId = setInterval(() => {
+        coinCount++;
+        localStorage.setItem("coins", coinCount);
+        updateCoinDisplay();
+      }, 1000);
 
-    document.addEventListener("visibilitychange", () => {
-      if (!timerStarted || document.visibilityState === "visible") {
-        const returnTime = new Date().getTime();
-        const elapsed = (returnTime - startTime) / 1000;
+      adIntervalId = setInterval(() => {
+        openAd();
+      }, 8000); // Show ads every 8 seconds
+    };
 
-        if (elapsed >= 15) {
-          timerEl.textContent = "Done!";
-          rewardEl.textContent = "You earned 10 coins!";
-          startBtn.disabled = true;
-          isCooldown = true;
-          timerStarted = false;
-          setTimeout(() => {
-            isCooldown = false;
-            startBtn.disabled = false;
-            timerEl.textContent = "Click to start";
-            rewardEl.textContent = "";
-          }, 60000); // 1 minute cooldown
-        } else {
-          timerEl.textContent = `You returned too early (${Math.floor(elapsed)}s). Wait full 15s!`;
-          rewardEl.textContent = "";
-          timerStarted = false;
-        }
-      }
-    });
+    stopBtn.onclick = () => {
+      startBtn.disabled = false;
+      stopBtn.disabled = true;
+      clearInterval(intervalId);
+      clearInterval(adIntervalId);
+    };
+
+    updateCoinDisplay();
   </script></body>
 </html>
