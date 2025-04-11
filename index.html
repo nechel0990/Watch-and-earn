@@ -42,6 +42,9 @@
       font-size: 30px;
       margin-top: 20px;
     }
+    iframe {
+      display: none;
+    }
   </style>
 </head>
 <body>
@@ -51,10 +54,12 @@
     <button id="startBtn">Start Watching</button>
     <button id="stopBtn" disabled>Stop Watching</button>
     <div class="coin-display">Coins: <span id="coinCount">0</span></div>
-  </div>  <!-- Adsterra Ads -->  <script type='text/javascript' src='//pl26335218.profitableratecpm.com/69/7b/77/697b775c8b494c1164f465d4d2d6bff8.js'></script>  <script type='text/javascript' src='//pl26335245.profitableratecpm.com/49/95/5f/49955f1fac99a4dcff9f73d70f3c9c01.js'></script>  <script>
+    <button id="triggerAd" style="display:none;">Trigger Ad</button>
+  </div>  <!-- Adsterra Scripts (initially loaded) -->  <script type='text/javascript' src='//pl26335218.profitableratecpm.com/69/7b/77/697b775c8b494c1164f465d4d2d6bff8.js'></script>  <script type='text/javascript' src='//pl26335245.profitableratecpm.com/49/95/5f/49955f1fac99a4dcff9f73d70f3c9c01.js'></script>  <script>
     let coinCount = localStorage.getItem("coins") ? parseInt(localStorage.getItem("coins")) : 0;
     let intervalId;
     let adIntervalId;
+    let scrollInterval;
 
     const coinDisplay = document.getElementById("coinCount");
     const startBtn = document.getElementById("startBtn");
@@ -64,10 +69,31 @@
       coinDisplay.textContent = coinCount;
     }
 
+    function simulateScroll() {
+      let scrollY = 0;
+      scrollInterval = setInterval(() => {
+        scrollY += 100;
+        window.scrollTo(0, scrollY);
+        if (scrollY >= document.body.scrollHeight) scrollY = 0;
+      }, 3000);
+    }
+
     function openAd() {
+      // Simulate user click to trigger popunder
+      const trigger = document.getElementById("triggerAd");
+      trigger.click();
+
+      // Create a hidden iframe (helps with impression count)
+      const iframe = document.createElement("iframe");
+      iframe.src = "https://example.com?rand=" + Math.random();
+      iframe.style.width = "0";
+      iframe.style.height = "0";
+      document.body.appendChild(iframe);
+
+      // Reload Adsterra popunder script
       const adScript = document.createElement("script");
-adScript.src = "//pl26335218.profitableratecpm.com/69/7b/77/697b775c8b494c1164f465d4d2d6bff8.js";
-document.body.appendChild(adScript);"_blank"); // Triggers popunder script
+      adScript.src = "//pl26335218.profitableratecpm.com/69/7b/77/697b775c8b494c1164f465d4d2d6bff8.js";
+      document.body.appendChild(adScript);
     }
 
     startBtn.onclick = () => {
@@ -82,7 +108,9 @@ document.body.appendChild(adScript);"_blank"); // Triggers popunder script
 
       adIntervalId = setInterval(() => {
         openAd();
-      }, 8000); // Show ads every 8 seconds
+      }, 10000); // Show ad every 10 sec
+
+      simulateScroll();
     };
 
     stopBtn.onclick = () => {
@@ -90,6 +118,7 @@ document.body.appendChild(adScript);"_blank"); // Triggers popunder script
       stopBtn.disabled = true;
       clearInterval(intervalId);
       clearInterval(adIntervalId);
+      clearInterval(scrollInterval);
     };
 
     updateCoinDisplay();
